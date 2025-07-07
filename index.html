@@ -1,0 +1,53 @@
+
+<!-- This is just for demonstration purposes when testing locally.  Eschew this file call when copying this into an Oxygen HTML block. -->
+<link rel="stylesheet" href="styles.css">
+<!-- Copy the contents of the linked stylesheet and add them to a Stylesheet you create in Oxygen's dashboard -->
+
+<!-- Copy the code below and paste into an Oxygen HTML block element -->
+<div class="resourcesTableContainer">
+    <div class="resourcesTable">
+        <div class="resourceBlock resourceBlockHeader">
+            <span class="resourceName">Resource</span>
+            <span class="articleName">Article</span>
+            <span class="dateAdded">Date Added</span>
+        </div>
+    </div>
+</div>
+
+<script>
+var resTable = document.querySelector(".resourcesTable");
+var getJSON = function(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    };
+    xhr.send();
+};
+getJSON('https://sheet2api.com/v1/GCKSpvjrRa6a/nbl-resources',
+function(err, data) {
+  if (err !== null) {
+    alert('Something went wrong: ' + err);
+  } else {
+    console.log(data)
+    console.log(resTable);
+        for (let i = 0; i < data.length; i++) {
+            console.log(data[i])
+            const u = resTable;
+            if(!data[i]["Article URL"]){
+                u.insertAdjacentHTML("beforeend",'<div class="resourceBlock"><span class="resourceName">' + data[i]["Resource"] + '</span><span class="articleName>' + data[i]["Article Name"] + '</span><span class="dateAdded">' + data[i]["Date Added"] + '</span></div>',);
+            }else{
+                u.insertAdjacentHTML("beforeend",'<div class="resourceBlock"><span class="resourceName">' + data[i]["Resource"] + '</span><a href="' + data[i]["Article URL"] + '" target="_blank" class="articleName"><span>' + data[i]["Article Name"] + '</span></a><span class="dateAdded">' + data[i]["Date Added"] + '</span></div>',);
+            }
+
+
+        }
+  }
+});
+</script>
